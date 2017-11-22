@@ -1,3 +1,3 @@
-#define M 3
-#define N 2
-#define P 2
+#define M 4
+#define N 6
+#define P 5

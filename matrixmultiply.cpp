@@ -9,45 +9,47 @@
 
 #include "matrixmultiply.h"
 void 
-GetARowCoefficients(int A[N][M], unsigned row_ix, int RC[M]){
+GetARowCoefficients(short A[N][M], short row_ix, short RC[M]){
   //go through rows fish out coefficients
-  for (unsigned i=0 ; i < M; i++)
+  GetARowCoefficients_label0:for (unsigned i=0 ; i < M; i++)
     RC[i] = A[row_ix][i];
 }
 
 
 void
-GetBColCoefficients(int B[M][P], unsigned col_ix, int CC[M]){
-  //got through B cols fish out coefficieints
-  for (unsigned i=0; i < M; i++){
-    CC[i] = B[i][col_ix];
+GetBRowCoefficients(short B[M][P], unsigned row, short BC[P]){
+  //go through B row fish out coefficieints
+  GetBRowCoefficients_label0:for (unsigned i=0; i < P; i++){
+    BC[i] = B[row][i];
   }
 }
 
 
-void
-MultiplyAndStore(int RC[M], int CC[M], int C [N][P], int i, int j, unsigned row_size, unsigned col_size){
 
-  int temp_result=0;
-  for (unsigned li=0; li < M ; li++){
-    temp_result += (RC[li]*CC[li]);
-  }
-  
-  C[i][j]=temp_result;
-}
+//Matrix Multiply in row order.
 
+void matrixmultiply(short A[N][M], short B[M][P], short C[N][P]){
 
+ row_loop: for (unsigned i=0; i < N; i++){ //A row matrix loop
+	 short a_row[M];
+	 GetARowCoefficients(A, i, a_row);
 
-void matrixmultiply(int A[N][M], int B[M][P], int C[N][P]){
+	//initialize the acc
+    long int acc[P];
+    matrixmultiply_label1:for (unsigned j=0; j < P; j++)
+    	acc[j]=0;
 
- row_loop: for (unsigned i=0; i < N; i++){
-    int RC[M];
-    GetARowCoefficients(A, i, RC);
-  column_loop: for (unsigned j =0 ; j < P; j++){
-      int CC[M];
-      GetBColCoefficients(B,j, CC);
-      MultiplyAndStore(RC,CC,C,i,j, M, M);
+    //go through the B rows.
+    brow_loop: for (unsigned j=0; j < M; j++){ // B row matrix loop
+    	//choose a to be replicated.
+    	short rep = a_row[j];
+    	short b_row[P];
+    	GetBRowCoefficients(B,j,b_row);
+    	acc_loop: for (unsigned k=0; k< P; k++)
+    		dsp_assign: acc[k] += rep * b_row[k];
     }
-  }
+    result_loop:for (unsigned j=0; j< P; j++)
+    	C[i][j]=acc[j];
+ }
 }
 
