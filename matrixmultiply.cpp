@@ -8,6 +8,8 @@
 //
 
 #include "matrixmultiply.h"
+#include <string.h>
+
 void 
 GetARowCoefficients(short A[N][M], short row_ix, short RC[M]){
 #pragma HLS INLINE
@@ -62,3 +64,4 @@ void matrixmultiply(short A[N][M], short B[M][P], short C[N][P]){
  }
 }
 
+#include "mmintf.cpp"
