@@ -1,11 +1,14 @@
 /*
 //For standalone compilation
 #include <stdlib.h>
-#include <string.h>
-#include "matrixmultiply.h"
-void matrixmultiply(short A[N][M], short B[M][P], short C[N][P]);
-*/
 
+
+
+*/
+//#include <string.h>
+//#include "matrixmultiply.h"
+
+void matrixmultiply(short A[N][M], short B[M][P], short C[N][P]);
 typedef struct converter_nm {
   union rep {
     short S2D_array [N][M];
