@@ -39,7 +39,9 @@ short A[N_SZ][M_SZ];
 short B[M_SZ][P_SZ];
 short C[N_SZ][P_SZ];
 unsigned count=0;
- 
+#pragma HLS ARRAY_PARTITION variable=A_arg complete
+#pragma HLS ARRAY_PARTITION variable=B_arg complete
+#pragma HLS ARRAY_PARTITION variable=C_arg complete
 *done = 0;
 for (unsigned i =0; i < N_SZ; i++){
 	for (unsigned j=0; j < M_SZ; j++){
