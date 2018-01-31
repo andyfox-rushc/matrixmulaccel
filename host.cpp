@@ -36,6 +36,11 @@
 #include <iomanip>
 #include <math.h>
 
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <unistd.h>
+#include <stdio.h>
+
 #define DATA_SIZE_NM_IN_BYTES  (N_SZ*M_SZ*2)
 #define DATA_SIZE_MP_IN_BYTES  (M_SZ*P_SZ*2)
 #define DATA_SIZE_NP_IN_BYTES  (N_SZ*P_SZ*2)
@@ -83,6 +88,31 @@ void multiplyOut(short A[N_SZ][M_SZ],
   C[row][col] = result;
 }
 
+int
+timeval_subtract (struct timeval *result, struct timeval *x, struct timeval *y)
+{
+  /* Perform the carry for the later subtraction by updating y. */
+  if (x->tv_usec < y->tv_usec) {
+    int nsec = (y->tv_usec - x->tv_usec) / 1000000 + 1;
+    y->tv_usec -= 1000000 * nsec;
+    y->tv_sec += nsec;
+  }
+  if (x->tv_usec - y->tv_usec > 1000000) {
+    int nsec = (x->tv_usec - y->tv_usec) / 1000000;
+    y->tv_usec += 1000000 * nsec;
+    y->tv_sec -= nsec;
+  }
+
+  /* Compute the time remaining to wait.
+     tv_usec is certainly positive. */
+  result->tv_sec = x->tv_sec - y->tv_sec;
+  result->tv_usec = x->tv_usec - y->tv_usec;
+
+  /* Return 1 if result is negative. */
+  return x->tv_sec < y->tv_sec;
+}
+
+
 
 void matrix_multiply_tb(short A[N_SZ][M_SZ],
 			short B[M_SZ][P_SZ],
@@ -92,11 +122,17 @@ void matrix_multiply_tb(short A[N_SZ][M_SZ],
   DumpMatrix("A",N_SZ,M_SZ,(short*)A);
   DumpMatrix("B",M_SZ,P_SZ,(short*)B);
 
+  clock_t begin_clock = clock();
+
   for (unsigned row_ix=0; row_ix< N_SZ; row_ix++){ //row
     for (unsigned col_ix=0; col_ix < P_SZ; col_ix++){//col (result is N x P)
       multiplyOut(A,B,row_ix,col_ix, M_SZ /*a col size */,C);
     }
   }
+  clock_t end_clock = clock();
+  double time_spent = (double)(end_clock - begin_clock)/CLOCKS_PER_SEC;
+  printf("CPU time (secs)%f \n", time_spent);
+
   DumpMatrix("C = A*B",N_SZ,P_SZ,(short*)C);
   printf("-----------------------------------------\n");
 }
