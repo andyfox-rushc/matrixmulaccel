@@ -1,6 +1,10 @@
 #To build the accelerator code:
-xocc --target hw_emu --platform xilinx:kcu1500:4ddr-xpr:4.0 -k mmintf -o mmintf.bin matrixmultiply.cpp 
+xocc --target hw_emu --platform  xilinx_aws-vu9p-f1_4ddr-xpr-2pr:4.0 -k mmintf -o mmintf.bin matrixmultiply.cpp 
 #INFO: The default AWS Platform has been set to: 4DDR - /home/andy/aws-fpga/SDAccel/aws_platform/xilinx_aws-vu9p-f1_4ddr-xpr-2pr_4_0/xilinx_aws-vu9p-f1_4ddr-xpr-2pr_4_0.xpfm
+
+#xilinx:kcu1500:4ddr-xpr:4.0
+
+#xilinx_aws-vu9p-f1_4ddr-xpr-2pr:4.0
 
 #To build the host interface
 /opt/Xilinx/SDx/2017.2/bin/xcpp -DC_KERNEL -DSDX_PLATFORM=xilinx_xil-accel-rd-ku115_4ddr-xpr_4_0 -D__USE_XOPEN2K8 -I/opt/Xilinx/SDx/2017.2/runtime/include/1_2/ -I/opt/Xilinx/SDx/2017.2/Vivado_HLS/include/ -O0 -g -Wall -c -fmessage-length=0 -std=c++14 -DSDX_PLATFORM=xilinx_xil-accel-rd-ku115_4ddr-xpr_4_0 -D__USE_XOPEN2K8 -I/opt/Xilinx/SDx/2017.2/runtime/include/1_2/ -I/opt/Xilinx/SDx/2017.2/Vivado_HLS/include/ -O0 -g -Wall -fmessage-length=0  oclErrorCodes.cpp oclHelper.cpp host.cpp
