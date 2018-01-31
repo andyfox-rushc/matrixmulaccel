@@ -1,5 +1,5 @@
 #To build the accelerator code:
-xocc --target hw_emu --platform  xilinx_aws-vu9p-f1_4ddr-xpr-2pr:4.0 -k mmintf -o mmintf.bin matrixmultiply.cpp 
+xocc --target hw --platform  --platform /home/centos/src/project_data/aws-fpga/SDAccel/aws_platform/xilinx_aws-vu9p-f1_4ddr-xpr-2pr_4_0/xilinx_aws-vu9p-f1_4ddr-xpr-2pr_4_0.xpfm -k mmintf -o mmintf.bin matrixmultiply.cpp 
 #INFO: The default AWS Platform has been set to: 4DDR - /home/andy/aws-fpga/SDAccel/aws_platform/xilinx_aws-vu9p-f1_4ddr-xpr-2pr_4_0/xilinx_aws-vu9p-f1_4ddr-xpr-2pr_4_0.xpfm
 
 #xilinx:kcu1500:4ddr-xpr:4.0
