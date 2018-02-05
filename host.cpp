@@ -124,10 +124,13 @@ void matrix_multiply_tb(short A[N_SZ][M_SZ],
 
   clock_t begin_clock = clock();
 
+  unsigned iteration_count = 100;
+  for (unsigned i=0 ; i < iteration_count; i++){
   for (unsigned row_ix=0; row_ix< N_SZ; row_ix++){ //row
     for (unsigned col_ix=0; col_ix < P_SZ; col_ix++){//col (result is N x P)
       multiplyOut(A,B,row_ix,col_ix, M_SZ /*a col size */,C);
     }
+  }
   }
   clock_t end_clock = clock();
   double time_spent = (double)(end_clock - begin_clock)/CLOCKS_PER_SEC;
@@ -275,8 +278,9 @@ int main( int argc, char* argv[] ){
 
 
   matrix_multiply_tb(tb_a,tb_b,tb_c);
-  mmintf_hw((short*)source_a.data(),(short*)source_b.data(),(short*)tb1_c);
-  DumpMatrix("HW: C = A*B",N_SZ,P_SZ,(short*)tb1_c);
+  
+  //mmintf_hw((short*)source_a.data(),(short*)source_b.data(),(short*)tb1_c);
+  //  DumpMatrix("HW: C = A*B",N_SZ,P_SZ,(short*)tb1_c);
 
   
 
@@ -338,7 +342,9 @@ int main( int argc, char* argv[] ){
     return EXIT_FAILURE;
   }
 
-
+  unsigned iteration_count = 100;
+  clock_t begin_clock = clock();
+  for (unsigned ix =0 ; ix < iteration_count; ix++){
   kernel.setArg(0,buffer_a);
   kernel.setArg(1,buffer_b);
   kernel.setArg(2,buffer_result);
@@ -349,7 +355,11 @@ int main( int argc, char* argv[] ){
   
   //read back the results
   q.enqueueReadBuffer(buffer_result,CL_TRUE,0,DATA_SIZE_NP_IN_BYTES, source_results.data() );
+    }
 
+  clock_t end_clock = clock();
+  double time_spent = (double)(end_clock - begin_clock)/CLOCKS_PER_SEC;
+  printf("Accelerator time (secs)%f \n", time_spent);
 
   bool mis_match = false;
   count =0;
