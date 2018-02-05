@@ -12,4 +12,4 @@ cd /opt/Xilinx/SD
 
 
 
-/opt/Xilinx/SDx/2017.1.op/bin/xcpp -o "mmintf.exe" host.o oclErrorCodes.o oclHelper.o -lxilinxopencl.so -lpthread -lrt -lstdc++ -L/opt/Xilinx/SDx/2017.1/runtime/lib/x86_64 -lxilinxopencl.so -lpthread -lrt -lstdc++ -L/opt/Xilinx/SDx/2017.1/runtime/lib/x86_64
+#/opt/Xilinx/SDx/2017.1.op/bin/xcpp -o "mmintf.exe" host.o oclErrorCodes.o oclHelper.o -lxilinxopencl.so -lpthread -lrt -lstdc++ -L/opt/Xilinx/SDx/2017.1/runtime/lib/x86_64 -lxilinxopencl.so -lpthread -lrt -lstdc++ -L/opt/Xilinx/SDx/2017.1/runtime/lib/x86_64
