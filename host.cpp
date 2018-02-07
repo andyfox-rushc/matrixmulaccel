@@ -124,7 +124,7 @@ void matrix_multiply_tb(short A[N_SZ][M_SZ],
 
   clock_t begin_clock = clock();
 
-  unsigned iteration_count = 100;
+  unsigned iteration_count = 1000000;
   for (unsigned i=0 ; i < iteration_count; i++){
   for (unsigned row_ix=0; row_ix< N_SZ; row_ix++){ //row
     for (unsigned col_ix=0; col_ix < P_SZ; col_ix++){//col (result is N x P)
