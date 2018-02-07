@@ -30,8 +30,19 @@ GetBRowCoefficients(short B[M_SZ][P_SZ], unsigned row, short BC[P_SZ]){
   }
 }
 
-
-
+/*
+void brow_loop(short &a_row [M_SZ],
+	       short &B[M_SZ][P_SZ],
+	       unsigned j,
+	       short b_row& [P_SZ],
+	       long int acc[P_SZ] &acc){
+      	short rep = a_row[j];
+    	short b_row[P_SZ];
+    	GetBRowCoefficients(B,j,b_row);
+    	acc_loop: for (unsigned k=0; k< P_SZ; k++)
+    		dsp_assign: acc[k] += rep * b_row[k];
+}
+*/
 //Matrix Multiply in row order.
 
 void matrixmultiply(short *A_arg, short* B_arg, short* C_arg,unsigned char* done){
@@ -157,10 +168,12 @@ extern "C" void mmintf(short* A, short* B, short *C,unsigned char* done){
   unsigned char done_local=0;
   memcpy(A_short, (short*) A, SIZE_NM_IN_BYTES);
   memcpy(B_short, (short*) B, SIZE_MP_IN_BYTES);
+  for (unsigned i=0; i < 1000000; i++){
   matrixmultiply(A_short,
   		 B_short,
   		 C_short,
 		 &done_local);
+  }
   memcpy(C, (short*)C_short, SIZE_NP_IN_BYTES);
   *done = done_local;
 }

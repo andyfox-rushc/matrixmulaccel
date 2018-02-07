@@ -342,20 +342,18 @@ int main( int argc, char* argv[] ){
     return EXIT_FAILURE;
   }
 
-  unsigned iteration_count = 100;
   clock_t begin_clock = clock();
-  for (unsigned ix =0 ; ix < iteration_count; ix++){
   kernel.setArg(0,buffer_a);
   kernel.setArg(1,buffer_b);
   kernel.setArg(2,buffer_result);
   kernel.setArg(3,buffer_done);  
-  
+
+  //kernel does 1000000 mults  
   q.enqueueTask(kernel);
   q.finish();
   
   //read back the results
   q.enqueueReadBuffer(buffer_result,CL_TRUE,0,DATA_SIZE_NP_IN_BYTES, source_results.data() );
-    }
 
   clock_t end_clock = clock();
   double time_spent = (double)(end_clock - begin_clock)/CLOCKS_PER_SEC;
