@@ -175,7 +175,7 @@ extern "C" void mmintf(short* A, short* B, short *C,unsigned char* done){
 		 &done_local);
   }
   memcpy(C, (short*)C_short, SIZE_NP_IN_BYTES);
-  *done = done_local;
+  *done = 1;
 }
 
 
