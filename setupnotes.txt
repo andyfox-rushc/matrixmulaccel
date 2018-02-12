@@ -1,0 +1,111 @@
+How to build and run the image
+------------------------------
+
+
+1. Create the afi image from the binary
+log onto system:
+ssh -i "fpga_work.pem" centos@54.174.199.186
+
+cd $AWS_FPGA_REPO_DIRo
+source ./sdaccel_setup.sh
+source $XILINX_SDX/settings64.sh
+SDACCEL_DIR/tools/create_sdaccel_afi.sh -xclbin=mmintf.bin -o=mmintf -s3_bucket=rushc -s3_dcp_key=key -s3_logs_key=logs
+INFO: Found xclbin 'mmintf.bin'
+
+cat *afi_id.txt
+{
+    "FpgaImageId": "afi-0081cd4e3d5577bb6", 
+    "FpgaImageGlobalId": "agfi-055c39ff84ac94d43"
+}
+
+#check to see when image is ready
+
+aws ec2 describe-fpga-images --fpga-image-ids afi-0081cd4e3d5577bb6
+
+aws ec2 describe-fpga-images --fpga-image-ids afi-0081cd4e3d5577bb6
+{
+    "FpgaImages": [
+        {
+            "UpdateTime": "2018-02-05T20:23:07.000Z", 
+            "Name": "mmintf.bin", 
+            "PciId": {
+                "SubsystemVendorId": "0xfedd", 
+                "VendorId": "0x1d0f", 
+                "DeviceId": "0xf000", 
+                "SubsystemId": "0x1d51"
+            }, 
+            "FpgaImageGlobalId": "agfi-055c39ff84ac94d43", 
+            "Public": false, 
+            "State": {
+                "Code": "available"
+            }, 
+            "ShellVersion": "0x071417d3", 
+            "OwnerId": "247724514994", 
+            "FpgaImageId": "afi-0081cd4e3d5577bb6", 
+            "CreateTime": "2018-02-05T19:32:16.000Z", 
+            "Description": "mmintf.bin"
+        }
+    ]
+}
+
+-- wait for available.
+
+
+2. Run on the fpga:
+
+change instace from c4 large to f1.2xlarge
+
+aws ec2 describe-fpga-images --fpga-image-ids afi-0081cd4e3d5577bb6
+{
+    "FpgaImages": [
+        {
+            "UpdateTime": "2018-02-05T20:23:07.000Z", 
+            "Name": "mmintf.bin", 
+            "PciId": {
+                "SubsystemVendorId": "0xfedd", 
+                "VendorId": "0x1d0f", 
+                "DeviceId": "0xf000", 
+                "SubsystemId": "0x1d51"
+            }, 
+            "FpgaImageGlobalId": "agfi-055c39ff84ac94d43", 
+            "Public": false, 
+            "State": {
+                "Code": "available"
+            }, 
+            "ShellVersion": "0x071417d3", 
+            "OwnerId": "247724514994", 
+            "FpgaImageId": "afi-0081cd4e3d5577bb6", 
+            "CreateTime": "2018-02-05T19:32:16.000Z", 
+            "Description": "mmintf.bin"
+        }
+    ]
+}
+AFI          0       none                    cleared           1        ok               0       0x071417d3
+AFIDEVICE    0       0x1d0f      0x1042      0000:00:1d.0
+centos@ip-172-30-0-17 aws-fpga]$ sudo fpga-describe-local-image -S 0 -H
+Type  FpgaImageSlot  FpgaImageId             StatusName    StatusCode   ErrorName    ErrorCode   ShVersion
+AFI          0       none                    cleared           1        ok               0       0x071417d3
+Type  FpgaImageSlot  VendorId    DeviceId    DBDF
+AFIDEVICE    0       0x1d0f      0x1042      0000:00:1d.0
+
+sudo fpga-clear-local-image -S 0
+AFI          0       none                    cleared           1        ok               0       0x071417d3
+AFIDEVICE    0       0x1d0f      0x1042      0000:00:1d.0
+[centos@ip-172-30-0-17 aws-fpga]$ sudo fpga-describe-local-image -S 0 -H
+Type  FpgaImageSlot  FpgaImageId             StatusName    StatusCode   ErrorName    ErrorCode   ShVersion
+AFI          0       none                    cleared           1        ok               0       0x071417d3
+Type  FpgaImageSlot  VendorId    DeviceId    DBDF
+AFIDEVICE    0       0x1d0f      0x1042      0000:00:1d.0
+[centos@ip-172-30-0-17 aws-fpga]$ sudo fpga-load-local-image -S 0 -I agfi-055c39ff84ac94d43
+AFI          0       agfi-055c39ff84ac94d43  loaded            0        ok               0       0x071417d3
+AFIDEVICE    0       0x1d0f      0xf000      0000:00:1d.0
+
+
+sudo fpga-clear-local-image -S 0
+  225  sudo fpga-describe-local-image -S 0 -H
+  226  sudo fpga-load-local-image -S 0 -I agfi-055c39ff84ac94d43
+  227  sudo sh
+
+
+source /opt/Xilinx/SDx/2017.1.rte/setup.sh
+./mmintf.exe mmintf.awsxclbin
