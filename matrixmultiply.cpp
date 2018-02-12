@@ -168,14 +168,15 @@ extern "C" void mmintf(short* A, short* B, short *C,unsigned char* done){
   unsigned char done_local=0;
   memcpy(A_short, (short*) A, SIZE_NM_IN_BYTES);
   memcpy(B_short, (short*) B, SIZE_MP_IN_BYTES);
-  for (unsigned i=0; i < 1000000; i++){
+  top_loop : for (unsigned i=0; i < 1000000; i++){
+#pragma HLS UNROLL factor=10
   matrixmultiply(A_short,
   		 B_short,
   		 C_short,
 		 &done_local);
   }
   memcpy(C, (short*)C_short, SIZE_NP_IN_BYTES);
-  *done = done_local;
+  *done = 1;
 }
 
 
