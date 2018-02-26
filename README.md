@@ -3,7 +3,8 @@
 ### Algorithm
 The material in this repository allows one to run 100,000 15x20 matrix multiplies in hw. The measured performance is 1000 times faster than the CPU equivalent. The multiplication uses row access (that is to say rather than doing the usual row/column access for multiply we access both coefficient memories in row order). The inner loop is:
 
-`row_loop: for (unsigned i=0; i < N_SZ; i++){ //A row matrix loop
+```
+row_loop: for (unsigned i=0; i < N_SZ; i++){ //A row matrix loop
 	 short a_row[M_SZ];
 	 GetARowCoefficients(A, i, a_row);
 
@@ -24,13 +25,17 @@ The material in this repository allows one to run 100,000 15x20 matrix multiplie
     result_loop:for (unsigned j=0; j< P_SZ; j++){
     	C[i][j]=acc[j];
     }
- }`
+ }
+ ```
 
 #How to build
 Building has two parts: host construction and accelerator construction. Both need to be run on the Amazon instance (I used a c4.xlarge to do the build).
 For the host:
+
 * ./ahbuild.sh
+
 For the accelerator
+
 * ./abuild.sh
 
 #How to run
