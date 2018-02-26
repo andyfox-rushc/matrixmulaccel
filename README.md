@@ -28,7 +28,7 @@ row_loop: for (unsigned i=0; i < N_SZ; i++){ //A row matrix loop
  }
  ```
 
-###How to build
+### How to build
 Building has two parts: host construction and accelerator construction. Both need to be run on the Amazon instance (I used a c4.xlarge to do the build).
 For the host:
 
@@ -38,7 +38,7 @@ For the accelerator
 
 * ./abuild.sh
 
-###How to run
+### How to run
 Running on amazon is tricky and requires setting up so-called s3 buckets. Assuming you have successfully compiled to an xclbin then it is necessary to:
 
 * First create an afi image. This is done using the create_sdaccel_afi.sh program.
