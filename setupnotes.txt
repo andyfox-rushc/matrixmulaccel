@@ -1,10 +1,12 @@
 How to build and run the image
 ------------------------------
 
+It was found it was necessary to do both the compile and the run on the Amazon
+server.
 
 1. Create the afi image from the binary
 log onto system:
-ssh -i "fpga_work.pem" centos@54.174.199.186
+ssh -i "******.pem" centos@54.174.199.186
 
 cd $AWS_FPGA_REPO_DIRo
 source ./sdaccel_setup.sh
